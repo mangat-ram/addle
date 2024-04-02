@@ -15,6 +15,13 @@
       "when": 1712074615045,
       "tag": "0001_previous_wrecker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712077196032,
+      "tag": "0002_massive_lightspeed",
+      "breakpoints": true
     }
   ]
 }
