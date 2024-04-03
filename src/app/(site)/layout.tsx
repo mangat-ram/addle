@@ -1,8 +1,10 @@
 import React from 'react'
 
-function HomePageLayout() {
+
+
+function HomePageLayout({children}:{children: React.ReactNode}) {
   return (
-    <div>HomePageLayout</div>
+    <main>{children}</main>
   )
 }
 
