@@ -6,12 +6,12 @@ import Banner from '../../../public/appBanner.png';
 
 function HomePage() {
   return (
-    <section>
-      <div
+    <>
+      <section
         className='overflow-hidden px-4 sm:px-6 mt-10 sm:flex sm:flex-col gap-4 md:justify-center md:items-center'
       >
         <TitleSection 
-          pill='⭐ Your Workspace Perfected ' 
+          pill='⭐ Your Workspace,Perfected' 
           title='All-In-One Collaboration and Productivity Platform' 
         />
         <div
@@ -28,8 +28,11 @@ function HomePage() {
           <Image src={Banner} alt="appBanner" />
           <div className='bottom-0 top-[50%] bg-gradient-to-t dark:from-background left-0 right-0 absolute z-10'></div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section className='relative'>
+        <div className='overflow-hidden flex absolute after:content-[" "] after:dark:from-brand-dark after:to-transparent after:from-background after:bg-gradient-to-l after:right-0 after:bottom-0 after:top-0 after:w-20  after:z-10 after:absolute before:content-[" "] before:dark:from-brand-dark before:to-transparent before:from-background before:bg-gradient-to-r before:left-0 before:top-0 before:bottom-0 before:w-20 before:z-10 before:absolute'></div>
+      </section>
+    </>
   )
 }
 
