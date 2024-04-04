@@ -5,6 +5,11 @@ import Image from 'next/image';
 import Banner from '../../../public/appBanner.png';
 import Cal from '../../../public/cal.png';
 import { CLIENTS } from '@/lib/constants';
+import { randomUUID } from 'crypto';
+import { USERS } from '@/lib/constants';
+import { twMerge } from 'tailwind-merge';
+import { clsx } from 'clsx';
+import CustomCard from '@/components/landing-page/custom-card';
 
 function HomePage() {
   return (
