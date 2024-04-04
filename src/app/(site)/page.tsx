@@ -10,6 +10,9 @@ import { USERS } from '@/lib/constants';
 import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
 import CustomCard from '@/components/landing-page/custom-card';
+import { Avatar,AvatarImage,AvatarFallback } from '@/components/ui/avatar';
+import { CardTitle } from '@/components/ui/card';
+import { CardDescription } from '@/components/ui/card';
 
 function HomePage() {
   return (
