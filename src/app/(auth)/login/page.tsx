@@ -7,10 +7,13 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormSchema } from '@/lib/types';
 import Link from 'next/link';
-import { Form, FormControl, FormDescription, FormField, FormItem } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import Image from 'next/image';
 import addle from '../../../../public/addle.png';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import Loader from '@/components/Loader';
+import { actionLoginUser } from '@/lib/server-action/auth-action';
 
 
 const LoginPage = () => {
@@ -25,9 +28,16 @@ const LoginPage = () => {
   })
 
   const isLoading = form.formState.isSubmitting;
-  const onSubmit:SubmitHandler<z.infer<typeof FormSchema>> = async (formData) => {
-
-  }
+  const onSubmit:SubmitHandler<z.infer<typeof FormSchema>> = async (
+    formData
+  ) => {
+    const { error } = await actionLoginUser(formData);
+    if(error){
+      form.reset();
+      setSubmitError(error.message);
+    }
+    router.replace('/dashboard');
+  };
 
   return (
     <Form {...form}>
@@ -57,11 +67,41 @@ const LoginPage = () => {
             <FormControl>
               <Input type='email' placeholder='Email' {...field} />
             </FormControl>
+            <FormMessage />
           </FormItem>
           )}
+        />
+        <FormField
+          disabled={isLoading}
+          control={form.control}
+          name='password'
+          render={(field) => (
+            <FormItem>
+            <FormControl>
+              <Input type='password' placeholder='Password' {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+          )}
+        />
+        {submitError && <FormMessage>{submitError}</FormMessage>}
+        <Button 
+          type='submit'
+          className='w-full p-6'
+          size='lg'
+          disabled={isLoading}
         >
-          
-        </FormField>
+          {!isLoading ? 'Login': <Loader />}
+        </Button>
+        <span className='self-container'>
+          Dont Have an Account ?{" "}
+          <Link 
+            href='/signup'
+            className='text-primary'
+          >
+            Sign Up
+          </Link>
+        </span>
       </form>
     </Form>
   )
