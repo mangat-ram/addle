@@ -1,11 +1,14 @@
 'use client';
 
 import Loader from '@/components/Loader';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { FormSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
+import { MailCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
@@ -63,8 +66,8 @@ const SignUp = () => {
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = () => {
-
+  const onSubmit = async ({email,password}: z.infer<typeof FormSchema>) => {
+    
   }
 
   const signUpHandler = () => {}
@@ -152,6 +155,19 @@ const SignUp = () => {
             Login
           </Link>
         </span>
+        {(confirmation || exchangeError) && 
+          <>
+            <Alert className={confirmationAndErrorStyles}>
+              {!exchangeError && <MailCheck className='h-4 w-4' />}
+              <AlertTitle>
+                {exchangeError ? "Invalid Link" : "Check your email."}
+              </AlertTitle>
+              <AlertDescription>
+                {exchangeError || "An email confirmation has been sent."}
+              </AlertDescription>
+            </Alert>
+          </>
+        }
       </form>
     </Form>
   )
