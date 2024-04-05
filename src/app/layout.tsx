@@ -27,7 +27,9 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="dark"
           enableSystem
-        >{children}</ThemeProvider>
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
