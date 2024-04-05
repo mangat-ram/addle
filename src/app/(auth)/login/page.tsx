@@ -7,9 +7,10 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormSchema } from '@/lib/types';
 import Link from 'next/link';
-import { Form } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem } from '@/components/ui/form';
 import Image from 'next/image';
 import addle from '../../../../public/addle.png';
+import { Input } from '@/components/ui/input';
 
 
 const LoginPage = () => {
@@ -40,8 +41,27 @@ const LoginPage = () => {
           className='w-full flex justify-start items-center'
         >
           {/* <Image src={addle} alt="AddleLogo" width={100} height={100} className='m-5' /> */}
-          <span className='font-semibold'>addle.co</span>
+          <span className='font-semibold text-4xl first-letter:ml-2'>addle.co</span>
         </Link>
+        <FormDescription
+            className='text-foreground/60'
+        >
+          All in One Collaboration and Productivity Platform
+        </FormDescription>
+        <FormField
+          disabled={isLoading}
+          control={form.control}
+          name='email'
+          render={(field) => (
+            <FormItem>
+            <FormControl>
+              <Input type='email' placeholder='Email' {...field} />
+            </FormControl>
+          </FormItem>
+          )}
+        >
+          
+        </FormField>
       </form>
     </Form>
   )
