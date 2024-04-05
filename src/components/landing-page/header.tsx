@@ -86,10 +86,10 @@ const Header = () => {
         />
         <span
           className="font-semibold
-          dark:text-white
+          dark:text-white text-4xl
         "
         >
-          cypress.
+          Addle.
         </span>
       </Link>
       <NavigationMenu className="hidden md:block">

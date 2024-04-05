@@ -1,176 +1,213 @@
 'use client';
-
-import Loader from '@/components/Loader';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { FormSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
-import { MailCheck } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react'
-import { Form, useForm } from 'react-hook-form';
-import { z } from 'zod'
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-const SignUpFormSchema = z.object(
-  {
-    email:z.string().describe('Email').email({message:'Invalid Email address'}),
-    password:z
+import Logo from '../../../../public/cypresslogo.svg';
+import Loader from '@/components/Loader';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { MailCheck } from 'lucide-react';
+import { FormSchema } from '@/lib/types';
+import { actionSignUpUser } from '@/lib/server-action/auth-action';
+
+const SignUpFormSchema = z
+  .object({
+    email: z.string().describe('Email').email({ message: 'Invalid Email' }),
+    password: z
       .string()
       .describe('Password')
-      .min(6,'Password must be min of six chracters'),
+      .min(6, 'Password must be minimum 6 characters'),
     confirmPassword: z
       .string()
       .describe('Confirm Password')
-      .min(6,'minimum six letters required')  
-  }
-)
-  .refine((data) => data.password === data.confirmPassword,{
-    message: 'Passwords dont match.',
-    path: ['confirmPassword'] 
+      .min(6, 'Password must be minimum 6 characters'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match.",
+    path: ['confirmPassword'],
   });
 
-const SignUp = () => {
-
-  const router = useRouter()
+const Signup = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const [submitError,setSubmitError] = useState('');
-  const [confirmation, setConfirmation] = useState(false)
+  const [submitError, setSubmitError] = useState('');
+  const [confirmation, setConfirmation] = useState(false);
 
-
-  const exchangeError = useMemo(() => {
-    if(!searchParams) return " ";
-    return searchParams.get('error_description')
-
+  const codeExchangeError = useMemo(() => {
+    if (!searchParams) return '';
+    return searchParams.get('error_description');
   }, [searchParams]);
 
   const confirmationAndErrorStyles = useMemo(
-    () => 
-      clsx('bg-primary',{
-        'bg-red-500/10':exchangeError,
-        'border-red-500/50': exchangeError,
-        'text-red-700': exchangeError
+    () =>
+      clsx('bg-primary', {
+        'bg-red-500/10': codeExchangeError,
+        'border-red-500/50': codeExchangeError,
+        'text-red-700': codeExchangeError,
       }),
-    []
-  )
+    [codeExchangeError]
+  );
 
   const form = useForm<z.infer<typeof SignUpFormSchema>>({
-    mode:'onChange',
-    resolver:zodResolver(SignUpFormSchema),
-    defaultValues:{email:'',password:'',confirmPassword:''},
+    mode: 'onChange',
+    resolver: zodResolver(SignUpFormSchema),
+    defaultValues: { email: '', password: '', confirmPassword: '' },
   });
 
   const isLoading = form.formState.isSubmitting;
+  const onSubmit = async ({ email, password }: z.infer<typeof FormSchema>) => {
+    const { error } = await actionSignUpUser({ email, password });
+    if (error) {
+      setSubmitError(error.message);
+      form.reset();
+      return;
+    }
+    setConfirmation(true);
+  };
 
-  const onSubmit = async ({email,password}: z.infer<typeof FormSchema>) => {
-    
-  }
-
-  const signUpHandler = () => {}
   return (
-    <Form
-      {...form}
-    >
+    <Form {...form}>
       <form
         onChange={() => {
-          if(submitError) setSubmitError('')
+          if (submitError) setSubmitError('');
         }}
         onSubmit={form.handleSubmit(onSubmit)}
-        className='w-full sm:justify-center sm:w-[400px] space-y-6 flex flex-col'
+        className="w-full sm:justify-center sm:w-[400px]
+        space-y-6 flex
+        flex-col
+        "
       >
-        <Link 
-          href='/'
-          className='w-full flex justify-start items-center'
+        <Link
+          href="/"
+          className="
+          w-full
+          flex
+          justify-left
+          items-center"
         >
-          {/* <Image src={addle} alt="AddleLogo" width={100} height={100} className='m-5' /> */}
-          <span className='font-semibold text-4xl first-letter:ml-2'>addle.co</span>
+          <Image
+            src={Logo}
+            alt="cypress Logo"
+            width={50}
+            height={50}
+          />
+          <span
+            className="font-semibold
+          dark:text-white text-4xl first-letter:ml-2"
+          >
+            Addle.
+          </span>
         </Link>
         <FormDescription
-            className='text-foreground/60'
+          className="
+        text-foreground/60"
         >
-          All in One Collaboration and Productivity Platform
+          An all-In-One Collaboration and Productivity Platform
         </FormDescription>
-        {!confirmation && !exchangeError && 
+        {!confirmation && !codeExchangeError && (
           <>
             <FormField
-            disabled={isLoading}
-            control={form.control}
-            name='email'
-            render={(field) => (
-              <FormItem>
-              <FormControl>
-                <Input type='email' placeholder='Email' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          disabled={isLoading}
-          control={form.control}
-          name='password'
-          render={(field) => (
-            <FormItem>
-            <FormControl>
-              <Input type='password' placeholder='Password' {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-          )}
-        />
-        <FormField
-          disabled={isLoading}
-          control={form.control}
-          name='confirmPassword'
-          render={(field) => (
-            <FormItem>
-            <FormControl>
-              <Input type='password' placeholder='Confirm Password' {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-          )}
-        />
-            <Button 
-              type='submit'
-              className='w-full p-6'  
+              disabled={isLoading}
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              disabled={isLoading}
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              disabled={isLoading}
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Confirm Password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="w-full p-6"
+              disabled={isLoading}
             >
               {!isLoading ? 'Create Account' : <Loader />}
             </Button>
           </>
-        }
-        
+        )}
+
         {submitError && <FormMessage>{submitError}</FormMessage>}
-        
-        <span className='self-container'>
-          Already have an Account ?{" "}
-          <Link 
-            href='/login'
-            className='text-primary'
+        <span className="self-container">
+          Already have an account?{' '}
+          <Link
+            href="/login"
+            className="text-primary"
           >
             Login
           </Link>
         </span>
-        {(confirmation || exchangeError) && 
+        {(confirmation || codeExchangeError) && (
           <>
             <Alert className={confirmationAndErrorStyles}>
-              {!exchangeError && <MailCheck className='h-4 w-4' />}
+              {!codeExchangeError && <MailCheck className="h-4 w-4" />}
               <AlertTitle>
-                {exchangeError ? "Invalid Link" : "Check your email."}
+                {codeExchangeError ? 'Invalid Link' : 'Check your email.'}
               </AlertTitle>
               <AlertDescription>
-                {exchangeError || "An email confirmation has been sent."}
+                {codeExchangeError || 'An email confirmation has been sent.'}
               </AlertDescription>
             </Alert>
           </>
-        }
+        )}
       </form>
     </Form>
-  )
-}
+  );
+};
 
-export default SignUp
+export default Signup;

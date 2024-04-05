@@ -51,7 +51,7 @@ const LoginPage = () => {
           className='w-full flex justify-start items-center'
         >
           {/* <Image src={addle} alt="AddleLogo" width={100} height={100} className='m-5' /> */}
-          <span className='font-semibold text-4xl first-letter:ml-2'>addle.co</span>
+          <span className='font-semibold text-4xl first-letter:ml-2'>Addle.</span>
         </Link>
         <FormDescription
             className='text-foreground/60'
