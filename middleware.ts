@@ -26,4 +26,15 @@ export async function middleware(req: NextRequest){
         )
       );
   }
+
+  if(['/login','/signup'].includes(req.nextUrl.pathname)){
+    if(session){
+      return NextResponse
+        .redirect(
+          new URL('/dashboard',req.url)
+        )
+    }
+  }
+
+  return res;
 }
