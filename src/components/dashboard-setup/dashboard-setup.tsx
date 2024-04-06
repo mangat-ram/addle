@@ -1,3 +1,5 @@
+'use client'
+
 import { AuthUser } from '@supabase/supabase-js'
 import React from 'react'
 import { 

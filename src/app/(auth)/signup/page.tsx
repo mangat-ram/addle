@@ -110,7 +110,7 @@ const Signup = () => {
             className="font-semibold
           dark:text-white text-4xl first-letter:ml-2"
           >
-            Addle.
+            cypress.
           </span>
         </Link>
         <FormDescription
