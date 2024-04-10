@@ -13,6 +13,6 @@ export const CreateWorkspaceSchema = z.object(
       .string()
       .describe('Workspace Name')
       .min(1,'workspace name must be of one letter'),
-    file: z.any(),
+    logo: z.any(),
   }
 );

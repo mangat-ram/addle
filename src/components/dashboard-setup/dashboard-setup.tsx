@@ -2,6 +2,8 @@
 
 import { AuthUser } from '@supabase/supabase-js'
 import React, { useState } from 'react'
+import { CreateWorkspaceSchema } from '@/lib/types';
+import { z } from 'zod';
 import { 
   Card, 
   CardContent, 
@@ -12,7 +14,7 @@ import {
 import EmojiPicker from '../global/emoji-picker';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { Subscription } from '@/lib/supabase/supabase.types';
 
 interface DashboardSetupProps{
@@ -26,12 +28,26 @@ const DashboardSetup:React.FC<DashboardSetupProps> = ({
 }) => { 
 
   const [selectedEmoji, setSelectedEmoji] = useState('')
-  const {register,handleSubmit,reset,formState:{isSubmitting:isLoading,errors}} = useForm<FieldValues>({mode:'onChange',
-    defaultValues:{
-      logo:'',
-      workspaceName:'',
-  }})
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState:{
+      isSubmitting:isLoading,errors
+    }} = useForm<z.infer<typeof CreateWorkspaceSchema>>(
+    {
+      mode:'onChange',
+      defaultValues:{
+        logo:'',
+        workspaceName:'',
+      }
+    }
+  )
 
+  const onSubmit:SubmitHandler<z.infer<typeof CreateWorkspaceSchema>> = async (value) => {
+    const file = value.logo?.[0];
+    let filePath = null;
+  }
 
 
   return (
