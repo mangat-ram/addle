@@ -33,7 +33,9 @@ const SideBar:React.FC<SideBarProps> = async ({ params, className }) => {
 
   //errors
   if(subscriptionError || foldersError) redirect('/dashboard')
+
   //get all the diffrent workspaces
+  
   return (
     <div>SideBar</div>
   )

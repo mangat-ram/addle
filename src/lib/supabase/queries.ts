@@ -1,10 +1,10 @@
 'use server'
 
-import { eq } from "drizzle-orm"
-import { folders } from "../../../migrations/schema"
+import { and, eq, notExists } from "drizzle-orm"
+import { folders, workspaces } from "../../../migrations/schema"
 import db from "./db"
 import { Subscription } from "./supabase.types"
-import { validate } from 'uuid'
+import { validate } from "uuid";
 import { Folder } from "./supabase.types"
 
 export const getUserSubscriptionStatus = async (userId: string) => {
@@ -38,4 +38,18 @@ export const getFolders = async (workspaceId: string) => {
   } catch (error) {
     return {data: null,error:"Error"}
   }
+}
+
+export const getPrivateWorkspaces = async (userId : string) => {
+  if(!userId) return[];
+  const privateWorkspaces = await db.select({
+    id: workspaces.id,
+    createdAt: workspaces.createdAt,
+    workspaceOwner: workspaces.workspaceOwner,
+    title: workspaces.title,
+    iconId: workspaces.iconId,
+    data: workspaces.data,
+    inTrash: workspaces.inTrash,
+    logo: workspaces.logo
+  }).from(workspaces).where(and(notExists(db.select().from(collboraters))));
 }
