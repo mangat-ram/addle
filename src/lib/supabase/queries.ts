@@ -3,9 +3,10 @@
 import { and, eq, notExists } from "drizzle-orm"
 import { folders, workspaces } from "../../../migrations/schema"
 import db from "./db"
-import { Subscription } from "./supabase.types"
+import { Subscription, workspace } from "./supabase.types"
 import { validate } from "uuid";
 import { Folder } from "./supabase.types"
+import { collborators } from "./schema"
 
 export const getUserSubscriptionStatus = async (userId: string) => {
   try {
@@ -51,5 +52,18 @@ export const getPrivateWorkspaces = async (userId : string) => {
     data: workspaces.data,
     inTrash: workspaces.inTrash,
     logo: workspaces.logo
-  }).from(workspaces).where(and(notExists(db.select().from(collboraters))));
+  })
+  .from(workspaces)
+  .where(
+    and(
+        notExists(
+          db
+          .select()
+          .from(collborators)
+          .where(eq(collborators.workspaceId, workspaces.id))
+        ),
+        eq(workspaces.workspaceOwner, userId)
+      )
+    ) as workspace[];
+  return privateWorkspaces;
 }
