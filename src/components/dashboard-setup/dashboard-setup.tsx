@@ -27,7 +27,7 @@ const DashboardSetup:React.FC<DashboardSetupProps> = ({
   subscription
 }) => { 
 
-  const [selectedEmoji, setSelectedEmoji] = useState('')
+  const [selectedEmoji, setSelectedEmoji] = useState('💼');
   const {
     register,
     handleSubmit,
