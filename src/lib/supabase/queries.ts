@@ -1,7 +1,7 @@
 'use server'
 
 import { and, eq, notExists } from "drizzle-orm"
-import { folders, workspaces } from "../../../migrations/schema"
+import { folders, users, workspaces } from "../../../migrations/schema"
 import db from "./db"
 import { Subscription, workspace } from "./supabase.types"
 import { validate } from "uuid";
@@ -66,4 +66,22 @@ export const getPrivateWorkspaces = async (userId : string) => {
       )
     ) as workspace[];
   return privateWorkspaces;
+}
+
+export const getCollaboratingWorkspaces = async (userId : string) => {
+  if(!userId) return [];
+  const collaboratedWorkspaces = await db
+      .select({
+        id: workspaces.id,
+        createdAt: workspaces.createdAt,
+        workspaceOwner: workspaces.workspaceOwner,
+        title: workspaces.title,
+        iconId: workspaces.iconId,
+        data: workspaces.data,
+        inTrash: workspaces.inTrash,
+        logo: workspaces.logo
+      }).from(users).innerJoin(collborators,eq(users.id, collborators.userId))
+      .innerJoin(workspaces,eq(collborators.workspaceId,workspaces.id))
+      .where(eq(users.id,userId)) as workspace[];
+    return collaboratedWorkspaces;
 }
