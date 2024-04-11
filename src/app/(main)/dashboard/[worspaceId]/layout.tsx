@@ -1,3 +1,4 @@
+import SideBar from '@/components/sidebar/sidebar';
 import React from 'react';
 
 interface LayoutProps {
