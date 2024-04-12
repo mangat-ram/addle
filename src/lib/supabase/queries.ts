@@ -85,3 +85,21 @@ export const getCollaboratingWorkspaces = async (userId : string) => {
       .where(eq(users.id,userId)) as workspace[];
     return collaboratedWorkspaces;
 }
+
+export const getSharedworkspaces = async(userId: string) => {
+  if(!userId) return [];
+  const sharedWorkspaces = await db
+      .selectDistinct({
+        id: workspaces.id,
+        createdAt: workspaces.createdAt,
+        workspaceOwner: workspaces.workspaceOwner,
+        title: workspaces.title,
+        iconId: workspaces.iconId,
+        data: workspaces.data,
+        inTrash: workspaces.inTrash,
+        logo: workspaces.logo
+      }).from(users).innerJoin(collborators,eq(users.id, collborators.userId))
+      .innerJoin(workspaces,eq(collborators.workspaceId,workspaces.id))
+      .where(eq(users.id,userId)) as workspace[];
+    return sharedWorkspaces;
+}
