@@ -3,6 +3,7 @@ import React from 'react'
 import { cookies } from 'next/headers';
 import { getCollaboratingWorkspaces, getFolders, getPrivateWorkspaces, getSharedworkspaces, getUserSubscriptionStatus } from '@/lib/supabase/queries';
 import { redirect } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 
 interface SideBarProps {
   params: {workspaceId : string};
@@ -45,8 +46,15 @@ const SideBar:React.FC<SideBarProps> = async ({ params, className }) => {
   
   return (
     <aside
-      className="hidden sm:flex sm:flex-col"
-    >SideBar</aside>
+      className={twMerge(
+        'hidden sm:flex sm:flex-col w-[280px] shrink-0 p-4 md:gap-4 !justify-between',
+        className
+      )}
+    >
+      <div>
+        
+      </div>
+    </aside>
   )
 }
 
