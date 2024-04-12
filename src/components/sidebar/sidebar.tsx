@@ -1,7 +1,7 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import React from 'react'
 import { cookies } from 'next/headers';
-import { getFolders, getUserSubscriptionStatus } from '@/lib/supabase/queries';
+import { getCollaboratingWorkspaces, getFolders, getPrivateWorkspaces, getSharedworkspaces, getUserSubscriptionStatus } from '@/lib/supabase/queries';
 import { redirect } from 'next/navigation';
 
 interface SideBarProps {
@@ -34,10 +34,19 @@ const SideBar:React.FC<SideBarProps> = async ({ params, className }) => {
   //errors
   if(subscriptionError || foldersError) redirect('/dashboard')
 
+  const [privateWorkspaces, colloboratingWorkspaces, sharedWorkspaces] = await Promise.all(
+    [
+      getPrivateWorkspaces(user.id),
+      getCollaboratingWorkspaces(user.id),
+      getSharedworkspaces(user.id)
+    ]
+  )
   //get all the diffrent workspaces
   
   return (
-    <div>SideBar</div>
+    <aside
+      className="hidden sm:flex sm:flex-col"
+    >SideBar</aside>
   )
 }
 
