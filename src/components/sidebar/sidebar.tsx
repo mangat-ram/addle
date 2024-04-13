@@ -63,7 +63,7 @@ const SideBar:React.FC<SideBarProps> = async ({ params, className }) => {
             ...collaboratingWorkspaces
           ]}
         >
-
+          
         </WorkspaceDropdown>
       </div>
     </aside>
