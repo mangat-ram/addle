@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { workspace } from '@/lib/supabase/supabase.types';
+import { workspaces } from '@/lib/supabase/schema';
 
 interface WorkspaceDropdownProps {
   privateWorkspaces : workspace[] | [];
@@ -25,18 +26,21 @@ const WorkspaceDropdown:React.FC<WorkspaceDropdownProps> = ({
     if(!state.workspaces.length){
       dispatch({
         type:"SET_WORKSPACES",
-        payload:[
+        payload:{
+          workspaces: [
           ...privateWorkspaces,
           ...sharedWorkspaces,
           ...collaboratingWorkspaces
-        ]
+          ].map((workspace) => ({...workspace,folders: []}))
+        }
       })
     }
   },[
     privateWorkspaces,
     sharedWorkspaces,
     collaboratingWorkspaces
-  ])
+  ]
+)
   return (
     <div>WorkspaceDropdown</div>
   )

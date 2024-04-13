@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { getCollaboratingWorkspaces, getFolders, getPrivateWorkspaces, getSharedworkspaces, getUserSubscriptionStatus } from '@/lib/supabase/queries';
 import { redirect } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import WorkspaceDropdown from './WorkspaceDropdown';
 
 interface SideBarProps {
   params: {workspaceId : string};
@@ -35,7 +36,7 @@ const SideBar:React.FC<SideBarProps> = async ({ params, className }) => {
   //errors
   if(subscriptionError || foldersError) redirect('/dashboard')
 
-  const [privateWorkspaces, colloboratingWorkspaces, sharedWorkspaces] = await Promise.all(
+  const [privateWorkspaces, collaboratingWorkspaces, sharedWorkspaces] = await Promise.all(
     [
       getPrivateWorkspaces(user.id),
       getCollaboratingWorkspaces(user.id),
@@ -52,7 +53,18 @@ const SideBar:React.FC<SideBarProps> = async ({ params, className }) => {
       )}
     >
       <div>
-        <WorkspaceDropdown></WorkspaceDropdown>
+        <WorkspaceDropdown
+          privateWorkspaces={privateWorkspaces}
+          sharedWorkspaces={sharedWorkspaces}
+          collaboratingWorkspaces={collaboratingWorkspaces}
+          defaultValues={[
+            ...privateWorkspaces,
+            ...sharedWorkspaces,
+            ...collaboratingWorkspaces
+          ]}
+        >
+
+        </WorkspaceDropdown>
       </div>
     </aside>
   )
