@@ -102,7 +102,13 @@ const WorkspaceDropdown:React.FC<WorkspaceDropdownProps> = ({
           </>
         )}
         </div>
-        <CustomDialogTrigger></CustomDialogTrigger>
+        <CustomDialogTrigger
+          header="Create A Workspace"
+          content={<WorkspaceCreator></WorkspaceCreator>}
+          description="Workspaces gives you the power to collaborate with others. You can change your workspace privacy settings after creating the workspace too."
+        >
+          
+        </CustomDialogTrigger>
       </div>
     </div>
   )
