@@ -36,13 +36,27 @@ const WorkspaceDropdown:React.FC<WorkspaceDropdownProps> = ({
       })
     }
   },[
-    privateWorkspaces,
-    sharedWorkspaces,
-    collaboratingWorkspaces
-  ]
-)
+      privateWorkspaces,
+      sharedWorkspaces,
+      collaboratingWorkspaces
+    ]
+  )
+
+  const handleSelect = (option : workspace[]) => {
+    setSelectedOption(option)
+    setIsOpen(false)
+  };
+
   return (
-    <div>WorkspaceDropdown</div>
+    <div
+      className="relative inline text-left"
+    >
+      <div>
+        <span onClick={() => setIsOpen(!isOpen)}>
+          {selectedOption ? <SelectedWorkspace></SelectedWorkspace> : "">}
+        </span>
+      </div>
+    </div>
   )
 }
 
