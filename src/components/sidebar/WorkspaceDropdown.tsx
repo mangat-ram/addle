@@ -23,7 +23,14 @@ const WorkspaceDropdown:React.FC<WorkspaceDropdownProps> = ({
 
   useEffect(() => {
     if(!state.workspaces.length){
-      dispatch({type:})
+      dispatch({
+        type:"SET_WORKSPACES",
+        payload:[
+          ...privateWorkspaces,
+          ...sharedWorkspaces,
+          ...collaboratingWorkspaces
+        ]
+      })
     }
   },[
     privateWorkspaces,
