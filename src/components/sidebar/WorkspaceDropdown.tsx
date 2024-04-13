@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { workspace } from '@/lib/supabase/supabase.types';
 import { workspaces } from '@/lib/supabase/schema';
+import SelectedWorkspace from './selectedWorkspace';
 
 interface WorkspaceDropdownProps {
   privateWorkspaces : workspace[] | [];
@@ -53,8 +54,55 @@ const WorkspaceDropdown:React.FC<WorkspaceDropdownProps> = ({
     >
       <div>
         <span onClick={() => setIsOpen(!isOpen)}>
-          {selectedOption ? <SelectedWorkspace></SelectedWorkspace> : "">}
+          {selectedOption ? (
+            <SelectedWorkspace workspace={selectedOption} />
+            ) : (
+              "Select a Workspace"
+            )}
         </span>
+      </div>
+      {isOpen && <div className="origin-top-right absolute w-full rounded-md shadow-md z-50 h-[190px] bg-black/10 backdrop-blur-lg group overflow-scroll border-[1px] border-muted"></div>}
+      <div className="rounded-md flex flex-col">
+        <div className="!p-2">
+          {!!privateWorkspaces.length && (<> 
+            <p className="text-muted-foreground">
+              Private
+            </p>
+            <hr />
+            {privateWorkspaces.map((option) => 
+              <SelectedWorkspace 
+                key={option.id} 
+                workspace={option} 
+                onClick={handleSelect}
+              />)}
+          </>
+        )}
+        {!!sharedWorkspaces.length && (
+          <>
+            <p className="text-muted-foreground">Shared</p>
+            <hr />
+            {sharedWorkspaces.map((option) => 
+              <SelectedWorkspace 
+                key={option.id} 
+                workspace={option} 
+                onClick={handleSelect}
+            />)}
+          </>
+        )}
+        {!!collaboratingWorkspaces.length && (
+          <>
+            <p className="text-muted-foreground">Collaborating</p>
+            <hr />
+            {collaboratingWorkspaces.map((option) => 
+              <SelectedWorkspace 
+                key={option.id} 
+                workspace={option} 
+                onClick={handleSelect}
+            />)}
+          </>
+        )}
+        </div>
+        <CustomDialogTrigger></CustomDialogTrigger>
       </div>
     </div>
   )
