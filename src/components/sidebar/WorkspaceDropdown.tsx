@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react'
 import { workspace } from '@/lib/supabase/supabase.types';
 import { workspaces } from '@/lib/supabase/schema';
 import SelectedWorkspace from './selectedWorkspace';
+import WorkspaceCreator from '../global/workspace-creator';
+import CustomDialogTrigger from './custom-dialog';
+import { useAppState } from '@/lib/providers/state-provider';
 
 interface WorkspaceDropdownProps {
   privateWorkspaces : workspace[] | [];
@@ -19,7 +22,7 @@ const WorkspaceDropdown:React.FC<WorkspaceDropdownProps> = ({
   defaultValues
 }) => {
 
-  const { dispatch, state} = useAppState();
+  const {dispatch, state} = useAppState();
   const [selectedOption, setSelectedOption] = useState(defaultValues)
   const [isOpen,setIsOpen] = useState(false)
 
@@ -104,14 +107,23 @@ const WorkspaceDropdown:React.FC<WorkspaceDropdownProps> = ({
         </div>
         <CustomDialogTrigger
           header="Create A Workspace"
-          content={<WorkspaceCreator></WorkspaceCreator>}
+          content={<WorkspaceCreator />}
           description="Workspaces gives you the power to collaborate with others. You can change your workspace privacy settings after creating the workspace too."
         >
-          
+          <div
+            className="flex transition-all hover:bg-muted justify-center items-center gap-2 p-2 w-full"
+          >
+            <article
+              className="text-slate-500 rounded-full bg-slate-500 h-4 w-4 flex items-center justify-center"
+            >
+              +
+            </article>
+            Create Workspace
+          </div>
         </CustomDialogTrigger>
       </div>
     </div>
   )
 }
 
-export default WorkspaceDropdown
+export default WorkspaceDropdown;

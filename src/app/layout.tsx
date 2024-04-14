@@ -5,6 +5,8 @@ import db from "@/lib/supabase/db";
 import { ThemeProvider } from "@/lib/providers/next-theme-provider";
 import { DM_Sans } from 'next/font/google';
 import { twMerge } from "tailwind-merge";
+import AppStateProvider from "@/lib/providers/state-provider";
+import { SupabaseUserProvider } from "@/lib/providers/supabase-user-provider";
 
 const inter = DM_Sans({ subsets: ["latin"] });
 
@@ -28,7 +30,11 @@ export default function RootLayout({
           defaultTheme="dark"
           enableSystem
         >
-          {children}
+          <AppStateProvider>
+            <SupabaseUserProvider>
+              {children}
+            </SupabaseUserProvider>
+          </AppStateProvider>
         </ThemeProvider>
       </body>
     </html>
