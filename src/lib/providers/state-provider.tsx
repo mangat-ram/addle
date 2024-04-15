@@ -17,6 +17,7 @@ export type appWorkspacesType = workspace & {
   folders: appFoldersType[] | [];
 };
 
+
 interface AppState {
   workspaces: appWorkspacesType[] | [];
 }
