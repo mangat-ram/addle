@@ -22,7 +22,7 @@ const routes = [
   { title: 'Features', href: '#features' },
   { title: 'Reasources', href: '#resources' },
   { title: 'Pricing', href: '#pricing' },
-  { title: 'Testimonials', href: '#testimonial' },
+  { title: 'Testimonials', href: '#testimonial' }, 
 ];
 
 const components: { title: string; href: string; description: string }[] = [
